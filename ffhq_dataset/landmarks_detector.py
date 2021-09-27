@@ -1,5 +1,6 @@
 import dlib
-
+from PIL import Image
+import numpy as np
 
 class LandmarksDetector:
     def __init__(self, predictor_model_path):
@@ -10,7 +11,10 @@ class LandmarksDetector:
         self.shape_predictor = dlib.shape_predictor(predictor_model_path)
 
     def get_landmarks(self, image):
-        img = dlib.load_rgb_image(image)
+        try:
+            img = dlib.load_rgb_image(image)
+        except Exception:
+            img = np.array(Image.open(image))
         dets = self.detector(img, 1)
 
         for detection in dets:
